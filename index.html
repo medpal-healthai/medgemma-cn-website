@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="了解谷歌DeepMind开发的MedGemma AI模型，专门用于医学文本和图像处理。探索功能特性、应用场景和实施指南。">
+    <meta name="keywords" content="MedGemma, 医学AI, 谷歌DeepMind, 医疗AI模型, 医学影像AI, 临床AI解决方案">
+    <title>MedGemma：先进的医学文本和图像分析AI模型 | 谷歌DeepMind</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script defer data-domain="medgemma.org" src="https://app.pageview.app/js/script.js"></script>
+
+    <!-- TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tech-blue': {
+                            100: '#E6F0FF',
+                            200: '#CCE0FF',
+                            300: '#99C0FF',
+                            400: '#66A0FF',
+                            500: '#3380FF',
+                            600: '#0055CC',
+                            700: '#004099',
+                            800: '#002B66',
+                            900: '#001533',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .gradient-tech {
+            background: linear-gradient(135deg, rgba(51, 128, 255, 0.9) 0%, rgba(51, 128, 255, 0.4) 100%);
+        }
+        
+        .gradient-tech-alt {
+            background: linear-gradient(135deg, rgba(0, 85, 204, 0.9) 0%, rgba(0, 85, 204, 0.4) 100%);
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Sticky Header with Glass Effect -->
+    <header class="glass-effect fixed w-full top-0 z-50 shadow-md">
+        <div class="max-w-screen-lg mx-auto px-4 py-2 md:py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="logo.png" alt="MedGemma Logo" class="h-6 md:h-8 w-auto mr-2 md:mr-3">
+                    <h1 class="text-tech-blue-800 text-lg md:text-xl font-bold">MedGemma</h1>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-6">
+                        <li><a href="#what-is-medgemma" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">什么是MedGemma</a></li>
+                        <li><a href="#features" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">功能特性</a></li>
+                        <li><a href="#how-to-use" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">使用方法</a></li>
+                        <li><a href="#faq" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">常见问题</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-tech-blue-700 focus:outline-none focus:text-tech-blue-500" id="mobile-menu-btn">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <div class="md:hidden hidden mt-4 pb-2" id="mobile-menu">
+                <nav>
+                    <ul class="space-y-2">
+                        <li><a href="#what-is-medgemma" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">什么是MedGemma</a></li>
+                        <li><a href="#features" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">功能特性</a></li>
+                        <li><a href="#how-to-use" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">使用方法</a></li>
+                        <li><a href="#faq" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">常见问题</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="pt-24 md:pt-28 pb-12 md:pb-16 bg-gradient-to-b from-tech-blue-100 to-white relative overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="bg.png" alt="医学AI背景" class="w-full h-full object-cover opacity-10">
+        </div>
+        
+        <!-- Content -->
+        <div class="max-w-screen-lg mx-auto px-4 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0 text-center md:text-left">
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-tech-blue-800 mb-4">Med<span class="text-tech-blue-600">Gemma</span></h1>
+                    <h2 class="text-xl sm:text-2xl md:text-3xl font-medium text-tech-blue-700 mb-6">先进的医学文本和图像分析AI模型</h2>
+                    <p class="text-base sm:text-lg text-gray-700">借助谷歌DeepMind的前沿<strong>MedGemma AI模型</strong>，为下一代医疗应用提供强大支持，专门用于医学理解。</p>
+                </div>
+                <div class="md:w-1/2 flex justify-center w-full">
+                    <div class="relative max-w-sm md:max-w-none">
+                        <div class="absolute -top-4 md:-top-8 -left-4 md:-left-8 w-32 h-32 md:w-48 md:h-48 rounded-full gradient-tech z-0"></div>
+                        <div class="relative z-10 bg-white rounded-lg shadow-lg p-4 md:p-6 w-full">
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-brain text-3xl md:text-5xl text-tech-blue-600 mr-3 md:mr-4"></i>
+                                <div>
+                                    <div class="text-5xl md:text-7xl font-bold text-tech-blue-800">2</div>
+                                    <div class="text-tech-blue-600 font-medium text-sm md:text-base">模型变体</div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 md:gap-4 mt-4">
+                                <div class="bg-tech-blue-50 p-2 md:p-3 rounded-md">
+                                    <div class="text-2xl md:text-4xl font-bold text-tech-blue-800">4B</div>
+                                    <div class="text-xs md:text-sm">多模态模型</div>
+                                </div>
+                                <div class="bg-tech-blue-50 p-2 md:p-3 rounded-md">
+                                    <div class="text-2xl md:text-4xl font-bold text-tech-blue-800">27B</div>
+                                    <div class="text-xs md:text-sm">纯文本模型</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Demo Section -->
+    <section class="py-12 md:py-16 bg-tech-blue-50">
+        <div class="max-w-full mx-auto px-2 md:px-4">
+            <div class="text-center mb-6 md:mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-tech-blue-800 mb-4">体验<span class="text-tech-blue-600">MedGemma</span>交互式演示</h2>
+                <p class="text-base md:text-lg text-gray-700">体验MedGemma 4B IT模型在医学文本和图像分析方面的强大功能</p>
+            </div>
+            <div class="flex justify-center">
+                <div class="bg-white rounded-xl shadow-lg p-2 md:p-4 border border-tech-blue-200" style="width: 95vw; max-width: 1200px;">
+                    <iframe
+                        src="https://warshanks-medgemma-4b-it.hf.space"
+                        frameborder="0"
+                        width="100%"
+                        height="800"
+                        class="rounded-lg"
+                        style="width: 100%; height: 800px; min-height: 800px;"
+                    ></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- What is MedGemma Section -->
+    <section id="what-is-medgemma" class="py-12 md:py-16">
+        <div class="max-w-screen-lg mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-tech-blue-800 mb-6 md:mb-8">什么是<span class="text-tech-blue-600">MedGemma</span>？</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+                <div class="lg:col-span-2">
+                    <p class="text-base md:text-lg mb-4"><strong>MedGemma</strong>是一套专门设计用于理解和处理医学文本和图像的前沿AI模型。由谷歌DeepMind开发并于2025年5月发布，<strong>MedGemma</strong>代表了医学人工智能领域的重大进步。</p>
+                    
+                    <p class="text-base md:text-lg mb-4">基于强大的Gemma 3架构构建，<strong>MedGemma</strong>已针对医疗应用进行了优化，为开发者提供了强大的工具来创建创新的医学解决方案。</p>
+                    
+                    <p class="text-base md:text-lg">作为健康AI开发者基金会的一部分，<strong>MedGemma</strong>旨在普及先进医学AI技术的访问，使全球的研究人员和开发者能够构建更有效的医疗应用。</p>
+                </div>
+                <div class="gradient-tech rounded-xl p-4 md:p-6 text-white">
+                    <div class="mb-4">
+                        <i class="fas fa-calendar-alt text-xl md:text-2xl"></i>
+                        <h3 class="text-lg md:text-xl font-bold mt-2">最新发展</h3>
+                    </div>
+                    <p class="text-sm md:text-base">在Google I/O 2025发布</p>
+                    <div class="mt-4 md:mt-6">
+                        <div class="text-4xl md:text-5xl font-bold">2025年</div>
+                        <div class="text-2xl md:text-3xl font-medium">5月</div>
+                    </div>
+                    <div class="mt-4 md:mt-6 text-xs md:text-sm">
+                        <p>作为谷歌通过技术增强医疗保健持续努力的一部分而发布</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-gray-50">
+        <div class="max-w-screen-lg mx-auto px-4">
+            <h2 class="text-4xl font-bold text-tech-blue-800 mb-2"><span class="text-tech-blue-600">MedGemma</span>的功能特性</h2>
+            <p class="text-xl text-gray-600 mb-12">专为医学应用设计的强大功能</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <!-- Model Variants -->
+                <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-tech-blue-500">
+                    <h3 class="text-2xl font-bold text-tech-blue-800 mb-4">MedGemma模型变体</h3>
+                    <div class="space-y-6">
+                        <div class="flex">
+                            <div class="mr-4">
+                                <div class="w-12 h-12 rounded-full gradient-tech flex items-center justify-center">
+                                    <i class="fas fa-images text-white text-xl"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-semibold text-tech-blue-700">4B多模态模型</h4>
+                                <p>具有40亿参数，可处理医学图像和文本，使用在去标识化医学数据上预训练的SigLIP图像编码器。</p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="mr-4">
+                                <div class="w-12 h-12 rounded-full gradient-tech-alt flex items-center justify-center">
+                                    <i class="fas fa-file-medical-alt text-white text-xl"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-semibold text-tech-blue-700">27B纯文本模型</h4>
+                                <p>专为深度医学文本理解和临床推理优化，具有270亿参数。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Capabilities -->
+                <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-tech-blue-500">
+                    <h3 class="text-2xl font-bold text-tech-blue-800 mb-4">核心能力</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-tech-blue-500 mt-1 mr-2"></i>
+                            <span>医学图像分类（放射学、病理学等）</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-tech-blue-500 mt-1 mr-2"></i>
+                            <span>医学图像解释和报告生成</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-tech-blue-500 mt-1 mr-2"></i>
+                            <span>医学文本理解和临床推理</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-tech-blue-500 mt-1 mr-2"></i>
+                            <span>患者临床前访谈和分诊</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-tech-blue-500 mt-1 mr-2"></i>
+                            <span>临床决策支持和总结</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Performance Chart -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-12">
+                <h3 class="text-2xl font-bold text-tech-blue-800 mb-6">性能对比</h3>
+                <div class="h-64">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Use Cases -->
+            <h3 class="text-3xl font-bold text-tech-blue-700 mb-6"><span class="text-tech-blue-600">MedGemma</span>的应用场景</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg shadow-md p-5 border-l-4 border-tech-blue-500">
+                    <div class="text-tech-blue-500 text-3xl mb-3">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold text-tech-blue-800 mb-2">医疗应用开发</h4>
+                    <p>构建基于AI的应用程序，用于检查医学图像、生成报告和患者分诊。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-5 border-l-4 border-tech-blue-500">
+                    <div class="text-tech-blue-500 text-3xl mb-3">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold text-tech-blue-800 mb-2">医学研究与创新</h4>
+                    <p>通过Hugging Face和谷歌云开放访问先进AI，加速研究进程。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-5 border-l-4 border-tech-blue-500">
+                    <div class="text-tech-blue-500 text-3xl mb-3">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold text-tech-blue-800 mb-2">临床支持角色</h4>
+                    <p>增强患者访谈和临床决策支持，提高医疗效率。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How to Use Section -->
+    <section id="how-to-use" class="py-12 md:py-16">
+        <div class="max-w-screen-lg mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-tech-blue-800 mb-2">如何使用<span class="text-tech-blue-600">MedGemma</span></h2>
+            <p class="text-lg md:text-xl text-gray-600 mb-8 md:mb-12">实施指南和适配方法</p>
+            
+            <!-- Implementation Steps -->
+            <div class="relative mb-12 md:mb-16">
+                <div class="hidden md:block absolute left-8 top-0 h-full w-1 bg-tech-blue-200"></div>
+                
+                <div class="relative mb-8 md:mb-12">
+                    <div class="flex flex-col md:flex-row">
+                        <div class="flex-shrink-0 z-10 mb-4 md:mb-0">
+                            <div class="w-12 h-12 md:w-16 md:h-16 rounded-full gradient-tech flex items-center justify-center shadow-lg mx-auto md:mx-0">
+                                <span class="text-white text-lg md:text-2xl font-bold">1</span>
+                            </div>
+                        </div>
+                        <div class="md:ml-8 md:pt-3">
+                            <h3 class="text-xl md:text-2xl font-bold text-tech-blue-800 mb-3 text-center md:text-left">访问MedGemma模型</h3>
+                            <p class="text-base md:text-lg mb-4">MedGemma模型可在Hugging Face等平台上访问，需遵守健康AI开发者基金会的使用条款。</p>
+                            <div class="bg-gray-50 rounded-lg p-3 md:p-4 border border-gray-200 overflow-x-auto">
+                                <code class="text-tech-blue-800 text-xs md:text-sm">
+                                    # 加载MedGemma模型的Python代码示例<br>
+                                    from transformers import AutoTokenizer, AutoModelForCausalLM<br><br>
+                                    tokenizer = AutoTokenizer.from_pretrained("google/medgemma-4b-it")<br>
+                                    model = AutoModelForCausalLM.from_pretrained("google/medgemma-4b-it")
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative mb-8 md:mb-12">
+                    <div class="flex flex-col md:flex-row">
+                        <div class="flex-shrink-0 z-10 mb-4 md:mb-0">
+                            <div class="w-12 h-12 md:w-16 md:h-16 rounded-full gradient-tech-alt flex items-center justify-center shadow-lg mx-auto md:mx-0">
+                                <span class="text-white text-lg md:text-2xl font-bold">2</span>
+                            </div>
+                        </div>
+                        <div class="md:ml-8 md:pt-3">
+                            <h3 class="text-xl md:text-2xl font-bold text-tech-blue-800 mb-3 text-center md:text-left">适配方法</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4">
+                                <div class="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-100">
+                                    <h4 class="font-semibold text-tech-blue-700 mb-2 text-sm md:text-base">提示工程</h4>
+                                    <p class="text-sm md:text-base">使用少样本示例并将任务分解为子任务以提高性能。</p>
+                                </div>
+                                <div class="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-100">
+                                    <h4 class="font-semibold text-tech-blue-700 mb-2 text-sm md:text-base">微调</h4>
+                                    <p class="text-sm md:text-base">使用您自己的医学数据进行优化，配合GitHub笔记本等资源。</p>
+                                </div>
+                                <div class="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-100">
+                                    <h4 class="font-semibold text-tech-blue-700 mb-2 text-sm md:text-base">智能体编排</h4>
+                                    <p class="text-sm md:text-base">与网络搜索、FHIR生成器和Gemini Live等工具集成。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="flex flex-col md:flex-row">
+                        <div class="flex-shrink-0 z-10 mb-4 md:mb-0">
+                            <div class="w-12 h-12 md:w-16 md:h-16 rounded-full gradient-tech flex items-center justify-center shadow-lg mx-auto md:mx-0">
+                                <span class="text-white text-lg md:text-2xl font-bold">3</span>
+                            </div>
+                        </div>
+                        <div class="md:ml-8 md:pt-3">
+                            <h3 class="text-xl md:text-2xl font-bold text-tech-blue-800 mb-3 text-center md:text-left">部署选项</h3>
+                            <p class="text-base md:text-lg mb-4">根据您的需求选择合适的部署方法：</p>
+                            <div class="flex flex-col md:flex-row gap-4">
+                                <div class="flex-1 bg-white p-4 md:p-5 rounded-lg shadow-md border border-gray-200">
+                                    <div class="text-tech-blue-600 text-2xl md:text-3xl mb-3">
+                                        <i class="fas fa-laptop-code"></i>
+                                    </div>
+                                    <h4 class="text-lg md:text-xl font-semibold text-tech-blue-700 mb-2">本地部署</h4>
+                                    <p class="text-sm md:text-base">在本地运行模型，用于实验和开发目的。</p>
+                                </div>
+                                <div class="flex-1 bg-white p-4 md:p-5 rounded-lg shadow-md border border-gray-200">
+                                    <div class="text-tech-blue-600 text-2xl md:text-3xl mb-3">
+                                        <i class="fas fa-cloud"></i>
+                                    </div>
+                                    <h4 class="text-lg md:text-xl font-semibold text-tech-blue-700 mb-2">云端部署</h4>
+                                    <p class="text-sm md:text-base">通过模型花园在Vertex AI上部署为可扩展的HTTPS端点，用于生产级应用。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Considerations -->
+            <div class="bg-tech-blue-50 rounded-xl p-8 border-l-4 border-tech-blue-700">
+                <h3 class="text-2xl font-bold text-tech-blue-800 mb-4">实施考虑事项</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-xl font-semibold text-tech-blue-700 mb-2">验证要求</h4>
+                        <p>MedGemma模型开箱即用并非临床级别。开发者必须验证性能并在生产环境部署前进行必要改进。</p>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold text-tech-blue-700 mb-2">使用条款</h4>
+                        <p>MedGemma的使用受健康AI开发者基金会使用条款约束，开发者在访问模型前必须审阅并同意这些条款。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-gray-50">
+        <div class="max-w-screen-lg mx-auto px-4">
+            <h2 class="text-4xl font-bold text-tech-blue-800 mb-2">常见问题</h2>
+            <p class="text-xl text-gray-600 mb-12">关于<span class="text-tech-blue-700">MedGemma</span>的常见问题</p>
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-tech-blue-700 mb-2">4B多模态和27B纯文本MedGemma模型之间的主要区别是什么？</h3>
+                    <p>4B多模态模型具有40亿参数，可处理医学图像和文本，使用SigLIP图像编码器。27B纯文本模型专注于文本处理，具有270亿参数，专为更深层的医学文本理解和临床推理而优化。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-tech-blue-700 mb-2">MedGemma模型开箱即用是否适合临床使用？</h3>
+                    <p>不，MedGemma模型开箱即用不被认为是临床级别的。开发者必须验证其性能并在生产环境部署前进行必要改进，特别是对于涉及患者护理的应用。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-tech-blue-700 mb-2">如何访问MedGemma模型进行开发工作？</h3>
+                    <p>MedGemma模型可在Hugging Face和谷歌云等平台上访问，需遵守健康AI开发者基金会的使用条款。您可以在本地运行它们进行实验，或通过谷歌云部署用于生产级应用。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-tech-blue-700 mb-2">4B多模态模型可以处理哪些类型的医学图像？</h3>
+                    <p>4B多模态模型在多种医学图像上进行了预训练，包括胸部X光片、皮肤科图像、眼科图像和组织病理学切片，使其能够适应各种医学成像任务。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-tech-blue-700 mb-2">哪些适配方法可以提高MedGemma在特定任务上的性能？</h3>
+                    <p>开发者可以使用提示工程（少样本示例）、使用自己医学数据的微调，以及与网络搜索、FHIR生成器和Gemini Live等工具的智能体编排来增强特定用例的性能。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-tech-blue-700 mb-2">MedGemma是何时发布的，由谁发布？</h3>
+                    <p>MedGemma于2025年5月20-22日左右在Google I/O 2025期间由谷歌DeepMind正式发布，作为他们通过技术增强医疗保健持续努力的一部分。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-tech-blue-700 mb-2">MedGemma与同等规模的类似模型相比表现如何？</h3>
+                    <p>根据Google Developers上的模型卡，MedGemma相比同等规模的模型具有强劲的基准性能。它已在临床相关基准测试上进行评估，包括开放数据集和精选数据集，重点关注任务的专家人类评估。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-tech-blue-700 mb-2">是否有可用于微调MedGemma的资源？</h3>
+                    <p>是的，包括GitHub上的笔记本在内的资源可用于促进微调，例如在谷歌MedGemma GitHub仓库中提供的使用LoRA的微调示例。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-tech-blue-700 mb-2">运行MedGemma模型的硬件要求是什么？</h3>
+                    <p>硬件要求取决于模型变体。根据谷歌AI的帖子，MedGemma模型设计为高效，能够在单个GPU上运行微调和推理，使其比一些更大的模型更易于访问。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-tech-blue-700 mb-2">MedGemma是否支持多语言医学术语？</h3>
+                    <p>基于社区讨论，有关于MedGemma在非英语医学术语（如日语医学术语）性能的问题。这表明多语言支持可能有所不同，可能是未来改进或微调的一个领域。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-tech-blue-900 text-white py-8 md:py-10">
+        <div class="max-w-screen-lg mx-auto px-4">
+            <!-- Medical Disclaimer -->
+            <div class="bg-tech-blue-800 rounded-lg p-4 md:p-6 mb-6 md:mb-8 border-l-4 border-yellow-400">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mr-3 md:mr-4">
+                        <i class="fas fa-exclamation-triangle text-yellow-400 text-xl md:text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg md:text-xl font-bold text-yellow-400 mb-2 md:mb-3">医学免责声明</h3>
+                        <div class="text-tech-blue-100 space-y-1 md:space-y-2 text-xs md:text-sm">
+                            <p><strong>非医学建议：</strong>本网站提供的关于MedGemma的信息仅用于教育和信息目的。这不是医学建议、诊断或治疗。</p>
+                            <p><strong>仅供研究使用：</strong>MedGemma模型专为研究和开发目的而设计。它们不是临床级工具，未经适当验证和监管批准不应用于实际患者护理。</p>
+                            <p><strong>咨询医疗专业人员：</strong>医疗决策请始终咨询合格的医疗专业人员。不要仅依赖AI模型得出健康相关结论。</p>
+                            <p><strong>风险自负：</strong>用户对MedGemma模型的任何应用承担全部责任。开发者和本网站对基于AI模型输出的医疗决策不承担任何责任。</p>
+                            <p><strong>需要验证：</strong>任何临床应用都需要在医疗环境中部署前进行彻底验证、监管合规和专家医学监督。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                <div class="sm:col-span-2">
+                    <div class="flex items-center mb-3 md:mb-4">
+                        <img src="logo.png" alt="MedGemma Logo" class="h-6 md:h-8 w-auto mr-2 md:mr-3">
+                        <h3 class="text-lg md:text-xl font-bold">关于MedGemma</h3>
+                    </div>
+                    <p class="text-tech-blue-200 mb-3 md:mb-4 text-sm md:text-base">MedGemma代表了医学AI的重大进步，为医疗保健中的图像和文本处理提供强大的功能。</p>
+                    <p class="text-tech-blue-200 text-xs md:text-sm">© 2025 本网站运营由MedGemma.org.cn 团队支持（非Google公司），而MedGemma品牌及商标属于谷歌DeepMind 所有关于MedGemma的信息均基于公开可用数据。</p>
+                </div>
+                <div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4">资源</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://deepmind.google/models/gemma/medgemma/" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">MedGemma官方网站</a></li>
+                        <li><a href="https://developers.google.com/health-ai-developer-foundations/medgemma" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">开发者文档</a></li>
+                        <li><a href="https://github.com/Google-Health/medgemma" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">GitHub仓库</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4">连接</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://huggingface.co/collections/google/medgemma-release-680aade845f90bec6a3f60c4" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">Hugging Face集合</a></li>
+                        <li><a href="https://huggingface.co/spaces/google/rad_explain" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">放射学解释器演示</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Chart.js for Data Visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Wait for DOM to be loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Performance comparison chart
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            const performanceChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['医学图像分类', '报告生成', '临床推理', '文本理解', '整体性能'],
+                    datasets: [
+                        {
+                            label: 'MedGemma 4B',
+                            data: [82, 78, 74, 76, 80],
+                            backgroundColor: 'rgba(51, 128, 255, 0.7)',
+                            borderColor: 'rgba(51, 128, 255, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'MedGemma 27B',
+                            data: [72, 85, 88, 90, 85],
+                            backgroundColor: 'rgba(0, 85, 204, 0.7)',
+                            borderColor: 'rgba(0, 85, 204, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '其他同类模型',
+                            data: [70, 72, 69, 75, 72],
+                            backgroundColor: 'rgba(179, 179, 179, 0.7)',
+                            borderColor: 'rgba(179, 179, 179, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '性能分数'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Sticky header behavior
+            const header = document.querySelector('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('shadow-md');
+                } else {
+                    header.classList.remove('shadow-md');
+                }
+            });
+            
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    if (mobileMenu.classList.contains('hidden')) {
+                        icon.className = 'fas fa-bars text-xl';
+                    } else {
+                        icon.className = 'fas fa-times text-xl';
+                    }
+                });
+                
+                // Close mobile menu when clicking on a link
+                mobileMenuLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        const icon = mobileMenuBtn.querySelector('i');
+                        icon.className = 'fas fa-bars text-xl';
+                    });
+                });
+                
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!header.contains(e.target)) {
+                        mobileMenu.classList.add('hidden');
+                        const icon = mobileMenuBtn.querySelector('i');
+                        icon.className = 'fas fa-bars text-xl';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
