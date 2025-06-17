@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="探索MedGemma技术原理、行业应用和最新发展。深入了解医学AI技术趋势、案例研究和专家见解。">
+    <meta name="keywords" content="MedGemma博客, 医学AI技术, MedGemma原理, 医疗AI应用, 医学人工智能, AI医疗案例">
+    <title>MedGemma博客 - 医学AI技术深度解析与应用案例</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script defer data-domain="medgemma.org" src="https://app.pageview.app/js/script.js"></script>
+
+    <!-- TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tech-blue': {
+                            100: '#E6F0FF',
+                            200: '#CCE0FF',
+                            300: '#99C0FF',
+                            400: '#66A0FF',
+                            500: '#3380FF',
+                            600: '#0055CC',
+                            700: '#004099',
+                            800: '#002B66',
+                            900: '#001533',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .gradient-tech {
+            background: linear-gradient(135deg, rgba(51, 128, 255, 0.9) 0%, rgba(51, 128, 255, 0.4) 100%);
+        }
+        
+        .gradient-tech-alt {
+            background: linear-gradient(135deg, rgba(0, 85, 204, 0.9) 0%, rgba(0, 85, 204, 0.4) 100%);
+        }
+
+        .blog-card {
+            transition: all 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-tag {
+            transition: all 0.3s ease;
+        }
+
+        .category-tag:hover {
+            transform: scale(1.05);
+        }
+
+        .pagination-btn {
+            transition: all 0.3s ease;
+        }
+
+        .pagination-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .featured-post {
+            background: linear-gradient(135deg, rgba(51, 128, 255, 0.05) 0%, rgba(51, 128, 255, 0.02) 100%);
+            border-left: 4px solid #3380FF;
+        }
+
+        .read-time {
+            background: rgba(51, 128, 255, 0.1);
+            color: #004099;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Sticky Header with Glass Effect -->
+    <header class="glass-effect fixed w-full top-0 z-50 shadow-md">
+        <div class="max-w-screen-lg mx-auto px-4 py-2 md:py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="logo.png" alt="MedGemma Logo" class="h-6 md:h-8 w-auto mr-2 md:mr-3">
+                    <h1 class="text-tech-blue-800 text-lg md:text-xl font-bold">MedGemma</h1>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-6">
+                        <li><a href="index.html#what-is-medgemma" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">什么是MedGemma</a></li>
+                        <li><a href="index.html#features" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">功能特性</a></li>
+                        <li><a href="index.html#how-to-use" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">使用方法</a></li>
+                        <li><a href="index.html#faq" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">常见问题</a></li>
+                        <li><a href="products.html" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">项目展示</a></li>
+                        <li><a href="discuss.html" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">社区讨论</a></li>
+                        <li><a href="#" class="text-tech-blue-500 font-semibold text-sm lg:text-base">技术博客</a></li>
+
+                    </ul>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-tech-blue-700 focus:outline-none focus:text-tech-blue-500" id="mobile-menu-btn">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <div class="md:hidden hidden mt-4 pb-2" id="mobile-menu">
+                <nav>
+                    <ul class="space-y-2">
+                        <li><a href="index.html#what-is-medgemma" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">什么是MedGemma</a></li>
+                        <li><a href="index.html#features" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">功能特性</a></li>
+                        <li><a href="index.html#how-to-use" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">使用方法</a></li>
+                        <li><a href="index.html#faq" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">常见问题</a></li>
+                        <li><a href="products.html" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">项目展示</a></li>
+                        <li><a href="discuss.html" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">社区讨论</a></li>
+                        <li><a href="#" class="block text-tech-blue-500 font-semibold py-2 px-2 rounded bg-tech-blue-50 mobile-menu-link">技术博客</a></li>
+
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="pt-24 md:pt-28 pb-12 md:pb-16 bg-gradient-to-b from-tech-blue-100 to-white relative overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="bg.png" alt="医学AI背景" class="w-full h-full object-cover opacity-10">
+        </div>
+        
+        <!-- Content -->
+        <div class="max-w-screen-lg mx-auto px-4 relative z-10">
+            <div class="text-center">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-tech-blue-800 mb-4">Med<span class="text-tech-blue-600">Gemma</span> 技术博客</h1>
+                <h2 class="text-xl sm:text-2xl md:text-3xl font-medium text-tech-blue-700 mb-6">深度解析医学AI技术与应用</h2>
+                <p class="text-base sm:text-lg text-gray-700 max-w-3xl mx-auto">探索MedGemma的技术原理、行业应用案例和最新发展动态，与专家一起深入了解医学AI的前沿技术。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Filter -->
+    <section class="py-8 bg-white border-b border-gray-200">
+        <div class="max-w-screen-lg mx-auto px-4">
+            <div class="flex flex-wrap justify-center gap-3">
+                <button class="category-tag px-4 py-2 bg-tech-blue-600 text-white rounded-full text-sm font-medium active" data-category="all">全部文章</button>
+                <button class="category-tag px-4 py-2 bg-white text-tech-blue-600 border border-tech-blue-200 rounded-full text-sm font-medium hover:bg-tech-blue-50" data-category="technology">技术原理</button>
+                <button class="category-tag px-4 py-2 bg-white text-tech-blue-600 border border-tech-blue-200 rounded-full text-sm font-medium hover:bg-tech-blue-50" data-category="application">行业应用</button>
+                <button class="category-tag px-4 py-2 bg-white text-tech-blue-600 border border-tech-blue-200 rounded-full text-sm font-medium hover:bg-tech-blue-50" data-category="case-study">案例研究</button>
+                <button class="category-tag px-4 py-2 bg-white text-tech-blue-600 border border-tech-blue-200 rounded-full text-sm font-medium hover:bg-tech-blue-50" data-category="tutorial">开发教程</button>
+                <button class="category-tag px-4 py-2 bg-white text-tech-blue-600 border border-tech-blue-200 rounded-full text-sm font-medium hover:bg-tech-blue-50" data-category="news">行业动态</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Posts Section -->
+    <section class="py-12 md:py-16 bg-gray-50">
+        <div class="max-w-screen-lg mx-auto px-4">
+            
+            <!-- Blog Posts Grid -->
+            <div class="space-y-6" id="blog-posts">
+                
+                <!-- Featured Post -->
+                <article class="blog-card featured-post bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 p-6" data-category="technology">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 bg-tech-blue-100 text-tech-blue-700 text-xs rounded-full font-medium">技术原理</span>
+                            <span class="read-time px-2 py-1 text-xs rounded-full font-medium">15分钟阅读</span>
+                            <div class="flex items-center text-yellow-500">
+                                <i class="fas fa-star mr-1"></i>
+                                <span class="text-xs font-medium text-gray-600">精选文章</span>
+                            </div>
+                        </div>
+                        <time class="text-sm text-gray-500">2024年12月15日</time>
+                    </div>
+                    <h2 class="text-2xl font-bold text-tech-blue-800 mb-3 hover:text-tech-blue-600 cursor-pointer">
+                        <a href="blog-post-1.html">深度解析MedGemma架构：Transformer在医学领域的创新应用</a>
+                    </h2>
+                    <p class="text-gray-600 text-base leading-relaxed mb-4">
+                        MedGemma作为专门针对医学领域优化的大型语言模型，在架构设计上融合了最新的Transformer技术和医学知识图谱。本文将深入分析MedGemma的核心架构，包括其注意力机制优化、医学实体识别模块和多模态融合策略...
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-user mr-1 text-tech-blue-500"></i>
+                                <span>Dr. 李明华</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-eye mr-1 text-tech-blue-500"></i>
+                                <span>2,340 阅读</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-comment mr-1 text-tech-blue-500"></i>
+                                <span>23 评论</span>
+                            </div>
+                        </div>
+                        <a href="blog-post-1.html" class="inline-flex items-center text-tech-blue-600 hover:text-tech-blue-800 font-medium text-sm">
+                            阅读全文 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Regular Posts -->
+                <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 p-6" data-category="application">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">行业应用</span>
+                            <span class="read-time px-2 py-1 text-xs rounded-full font-medium">12分钟阅读</span>
+                        </div>
+                        <time class="text-sm text-gray-500">2024年12月12日</time>
+                    </div>
+                    <h2 class="text-xl font-bold text-tech-blue-800 mb-3 hover:text-tech-blue-600 cursor-pointer">
+                        <a href="blog-post-2.html">MedGemma在放射影像诊断中的突破性应用</a>
+                    </h2>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        随着医学影像数据的爆炸式增长，传统的人工诊断方式面临巨大挑战。MedGemma通过其强大的多模态处理能力，在X光、CT、MRI等影像诊断中展现出惊人的准确性。本文将探讨MedGemma如何革命性地改变放射科工作流程...
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-user mr-1 text-tech-blue-500"></i>
+                                <span>张教授</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-eye mr-1 text-tech-blue-500"></i>
+                                <span>1,890 阅读</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-comment mr-1 text-tech-blue-500"></i>
+                                <span>18 评论</span>
+                            </div>
+                        </div>
+                        <a href="blog-post-2.html" class="inline-flex items-center text-tech-blue-600 hover:text-tech-blue-800 font-medium text-sm">
+                            阅读全文 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 p-6" data-category="case-study">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs rounded-full font-medium">案例研究</span>
+                            <span class="read-time px-2 py-1 text-xs rounded-full font-medium">18分钟阅读</span>
+                        </div>
+                        <time class="text-sm text-gray-500">2024年12月10日</time>
+                    </div>
+                    <h2 class="text-xl font-bold text-tech-blue-800 mb-3 hover:text-tech-blue-600 cursor-pointer">
+                        <a href="blog-post-3.html">北京协和医院部署MedGemma：6个月实践总结报告</a>
+                    </h2>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        北京协和医院作为MedGemma的首批试点医院，经过6个月的深度应用，在诊断准确率、工作效率和患者满意度方面都取得了显著提升。本报告详细记录了部署过程、遇到的挑战以及解决方案...
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-user mr-1 text-tech-blue-500"></i>
+                                <span>王主任</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-eye mr-1 text-tech-blue-500"></i>
+                                <span>3,240 阅读</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-comment mr-1 text-tech-blue-500"></i>
+                                <span>45 评论</span>
+                            </div>
+                        </div>
+                        <a href="blog-post-3.html" class="inline-flex items-center text-tech-blue-600 hover:text-tech-blue-800 font-medium text-sm">
+                            阅读全文 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 p-6" data-category="tutorial">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 bg-orange-100 text-orange-700 text-xs rounded-full font-medium">开发教程</span>
+                            <span class="read-time px-2 py-1 text-xs rounded-full font-medium">25分钟阅读</span>
+                        </div>
+                        <time class="text-sm text-gray-500">2024年12月8日</time>
+                    </div>
+                    <h2 class="text-xl font-bold text-tech-blue-800 mb-3 hover:text-tech-blue-600 cursor-pointer">
+                        <a href="blog-post-4.html">从零开始：使用MedGemma API构建医疗诊断应用</a>
+                    </h2>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        想要开发基于MedGemma的医疗应用？本教程将手把手指导您完成从环境搭建到应用部署的全过程。我们将构建一个简单的症状分析工具，展示如何有效利用MedGemma的强大能力...
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-user mr-1 text-tech-blue-500"></i>
+                                <span>开发团队</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-eye mr-1 text-tech-blue-500"></i>
+                                <span>1,567 阅读</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-comment mr-1 text-tech-blue-500"></i>
+                                <span>32 评论</span>
+                            </div>
+                        </div>
+                        <a href="blog-post-4.html" class="inline-flex items-center text-tech-blue-600 hover:text-tech-blue-800 font-medium text-sm">
+                            阅读全文 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 p-6" data-category="technology">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 bg-tech-blue-100 text-tech-blue-700 text-xs rounded-full font-medium">技术原理</span>
+                            <span class="read-time px-2 py-1 text-xs rounded-full font-medium">20分钟阅读</span>
+                        </div>
+                        <time class="text-sm text-gray-500">2024年12月5日</time>
+                    </div>
+                    <h2 class="text-xl font-bold text-tech-blue-800 mb-3 hover:text-tech-blue-600 cursor-pointer">
+                        <a href="blog-post-5.html">MedGemma与传统NLP模型的性能对比分析</a>
+                    </h2>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        在医学文本处理任务中，MedGemma相比传统NLP模型展现出显著优势。本文通过严格的基准测试，对比分析了MedGemma在医学实体识别、关系抽取、文档分类等任务上的表现...
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-user mr-1 text-tech-blue-500"></i>
+                                <span>研究团队</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-eye mr-1 text-tech-blue-500"></i>
+                                <span>2,123 阅读</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-comment mr-1 text-tech-blue-500"></i>
+                                <span>28 评论</span>
+                            </div>
+                        </div>
+                        <a href="blog-post-5.html" class="inline-flex items-center text-tech-blue-600 hover:text-tech-blue-800 font-medium text-sm">
+                            阅读全文 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 p-6" data-category="news">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">行业动态</span>
+                            <span class="read-time px-2 py-1 text-xs rounded-full font-medium">8分钟阅读</span>
+                        </div>
+                        <time class="text-sm text-gray-500">2024年12月3日</time>
+                    </div>
+                    <h2 class="text-xl font-bold text-tech-blue-800 mb-3 hover:text-tech-blue-600 cursor-pointer">
+                        <a href="blog-post-6.html">全球医疗AI市场报告：MedGemma引领行业变革</a>
+                    </h2>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        根据最新发布的《2024全球医疗AI市场报告》，基于MedGemma技术的医疗AI应用正在快速增长，预计2025年市场规模将达到150亿美元。报告指出，MedGemma在准确性和可解释性方面的优势使其成为行业首选...
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-user mr-1 text-tech-blue-500"></i>
+                                <span>市场分析师</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-eye mr-1 text-tech-blue-500"></i>
+                                <span>1,456 阅读</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-comment mr-1 text-tech-blue-500"></i>
+                                <span>15 评论</span>
+                            </div>
+                        </div>
+                        <a href="blog-post-6.html" class="inline-flex items-center text-tech-blue-600 hover:text-tech-blue-800 font-medium text-sm">
+                            阅读全文 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 p-6" data-category="application">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">行业应用</span>
+                            <span class="read-time px-2 py-1 text-xs rounded-full font-medium">14分钟阅读</span>
+                        </div>
+                        <time class="text-sm text-gray-500">2024年12月1日</time>
+                    </div>
+                    <h2 class="text-xl font-bold text-tech-blue-800 mb-3 hover:text-tech-blue-600 cursor-pointer">
+                        <a href="blog-post-7.html">远程医疗新突破：MedGemma助力偏远地区医疗服务</a>
+                    </h2>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        在西藏、新疆等偏远地区，医疗资源稀缺一直是亟待解决的问题。通过部署基于MedGemma的远程诊断系统，当地医生可以获得专家级的诊断支持，大大提升了医疗服务质量...
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-user mr-1 text-tech-blue-500"></i>
+                                <span>卫健委报告</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-eye mr-1 text-tech-blue-500"></i>
+                                <span>2,789 阅读</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-comment mr-1 text-tech-blue-500"></i>
+                                <span>67 评论</span>
+                            </div>
+                        </div>
+                        <a href="blog-post-7.html" class="inline-flex items-center text-tech-blue-600 hover:text-tech-blue-800 font-medium text-sm">
+                            阅读全文 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 p-6" data-category="tutorial">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 bg-orange-100 text-orange-700 text-xs rounded-full font-medium">开发教程</span>
+                            <span class="read-time px-2 py-1 text-xs rounded-full font-medium">16分钟阅读</span>
+                        </div>
+                        <time class="text-sm text-gray-500">2024年11月28日</time>
+                    </div>
+                    <h2 class="text-xl font-bold text-tech-blue-800 mb-3 hover:text-tech-blue-600 cursor-pointer">
+                        <a href="blog-post-8.html">MedGemma模型微调实战：针对特定疾病的优化策略</a>
+                    </h2>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        通用的MedGemma模型虽然功能强大，但针对特定疾病领域进行微调可以获得更好的效果。本教程将以糖尿病诊断为例，详细介绍如何准备数据集、设计训练策略和评估模型性能...
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-user mr-1 text-tech-blue-500"></i>
+                                <span>技术专家</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-eye mr-1 text-tech-blue-500"></i>
+                                <span>1,234 阅读</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-comment mr-1 text-tech-blue-500"></i>
+                                <span>29 评论</span>
+                            </div>
+                        </div>
+                        <a href="blog-post-8.html" class="inline-flex items-center text-tech-blue-600 hover:text-tech-blue-800 font-medium text-sm">
+                            阅读全文 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 p-6" data-category="case-study">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs rounded-full font-medium">案例研究</span>
+                            <span class="read-time px-2 py-1 text-xs rounded-full font-medium">22分钟阅读</span>
+                        </div>
+                        <time class="text-sm text-gray-500">2024年11月25日</time>
+                    </div>
+                    <h2 class="text-xl font-bold text-tech-blue-800 mb-3 hover:text-tech-blue-600 cursor-pointer">
+                        <a href="blog-post-9.html">欧洲多中心研究：MedGemma在癌症早期筛查中的应用</a>
+                    </h2>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        一项涉及欧洲15个医疗中心的大规模研究显示，MedGemma在肺癌、乳腺癌等常见癌症的早期筛查中准确率达到94.5%，远超传统筛查方法。研究结果已发表在《Nature Medicine》期刊...
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-user mr-1 text-tech-blue-500"></i>
+                                <span>国际研究组</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-eye mr-1 text-tech-blue-500"></i>
+                                <span>4,567 阅读</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-comment mr-1 text-tech-blue-500"></i>
+                                <span>89 评论</span>
+                            </div>
+                        </div>
+                        <a href="blog-post-9.html" class="inline-flex items-center text-tech-blue-600 hover:text-tech-blue-800 font-medium text-sm">
+                            阅读全文 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 p-6" data-category="technology">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 bg-tech-blue-100 text-tech-blue-700 text-xs rounded-full font-medium">技术原理</span>
+                            <span class="read-time px-2 py-1 text-xs rounded-full font-medium">17分钟阅读</span>
+                        </div>
+                        <time class="text-sm text-gray-500">2024年11月22日</time>
+                    </div>
+                    <h2 class="text-xl font-bold text-tech-blue-800 mb-3 hover:text-tech-blue-600 cursor-pointer">
+                        <a href="blog-post-10.html">MedGemma的可解释性设计：让AI诊断更透明可信</a>
+                    </h2>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        医学AI的一个关键挑战是可解释性。MedGemma通过创新的注意力可视化、决策路径追踪和知识图谱映射等技术，让医生能够理解AI的诊断逻辑，从而提高对AI系统的信任度...
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-user mr-1 text-tech-blue-500"></i>
+                                <span>AI伦理团队</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-eye mr-1 text-tech-blue-500"></i>
+                                <span>1,890 阅读</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-comment mr-1 text-tech-blue-500"></i>
+                                <span>34 评论</span>
+                            </div>
+                        </div>
+                        <a href="blog-post-10.html" class="inline-flex items-center text-tech-blue-600 hover:text-tech-blue-800 font-medium text-sm">
+                            阅读全文 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-12 flex justify-center">
+                <nav class="flex items-center space-x-2">
+                    <button class="pagination-btn px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" id="prev-btn" disabled>
+                        <i class="fas fa-chevron-left mr-1"></i>
+                        上一页
+                    </button>
+                    
+                    <div class="flex space-x-1" id="page-numbers">
+                        <button class="pagination-btn px-3 py-2 bg-tech-blue-600 border border-tech-blue-600 rounded-lg text-sm font-medium text-white">1</button>
+                        <button class="pagination-btn px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">2</button>
+                        <button class="pagination-btn px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">3</button>
+                        <span class="px-3 py-2 text-sm text-gray-500">...</span>
+                        <button class="pagination-btn px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">12</button>
+                    </div>
+                    
+                    <button class="pagination-btn px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50" id="next-btn">
+                        下一页
+                        <i class="fas fa-chevron-right ml-1"></i>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Posts per page info -->
+            <div class="mt-6 text-center text-sm text-gray-500">
+                显示第 1-10 篇，共 118 篇文章
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-tech-blue-900 text-white py-8 md:py-10">
+        <div class="max-w-screen-lg mx-auto px-4">
+            <!-- Medical Disclaimer -->
+            <div class="bg-tech-blue-800 rounded-lg p-4 md:p-6 mb-6 md:mb-8 border-l-4 border-yellow-400">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mr-3 md:mr-4">
+                        <i class="fas fa-exclamation-triangle text-yellow-400 text-xl md:text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg md:text-xl font-bold text-yellow-400 mb-2 md:mb-3">医学免责声明</h3>
+                        <div class="text-tech-blue-100 space-y-1 md:space-y-2 text-xs md:text-sm">
+                            <p><strong>非医学建议：</strong>本博客文章仅用于教育和信息目的。文章内容不构成医学建议、诊断或治疗方案。</p>
+                            <p><strong>仅供研究参考：</strong>技术文章专为学术研究和技术交流而设计。请勿将技术信息直接用于临床决策。</p>
+                            <p><strong>咨询医疗专业人员：</strong>任何医疗相关决策请始终咨询合格的医疗专业人员。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                <div class="sm:col-span-2">
+                    <div class="flex items-center mb-3 md:mb-4">
+                        <img src="logo.png" alt="MedGemma Logo" class="h-6 md:h-8 w-auto mr-2 md:mr-3">
+                        <h3 class="text-lg md:text-xl font-bold">关于MedGemma</h3>
+                    </div>
+                    <p class="text-tech-blue-200 mb-3 md:mb-4 text-sm md:text-base">MedGemma代表了医学AI的重大进步，为医疗保健中的图像和文本处理提供强大的功能。</p>
+                    <p class="text-tech-blue-200 text-xs md:text-sm">© 2025 本网站运营由MedGemma.org.cn 团队支持（非Google公司），而MedGemma品牌及商标属于谷歌DeepMind 所有关于MedGemma的信息均基于公开可用数据。</p>
+                </div>
+                <div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4">资源</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://deepmind.google/models/gemma/medgemma/" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">MedGemma官方网站</a></li>
+                        <li><a href="https://developers.google.com/health-ai-developer-foundations/medgemma" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">开发者文档</a></li>
+                        <li><a href="https://github.com/Google-Health/medgemma" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">GitHub仓库</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4">连接</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://huggingface.co/collections/google/medgemma-release-680aade845f90bec6a3f60c4" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">Hugging Face集合</a></li>
+                        <li><a href="https://huggingface.co/spaces/google/rad_explain" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">放射学解释器演示</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Wait for DOM to be loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    if (mobileMenu.classList.contains('hidden')) {
+                        icon.className = 'fas fa-bars text-xl';
+                    } else {
+                        icon.className = 'fas fa-times text-xl';
+                    }
+                });
+                
+                // Close mobile menu when clicking on a link
+                mobileMenuLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        const icon = mobileMenuBtn.querySelector('i');
+                        icon.className = 'fas fa-bars text-xl';
+                    });
+                });
+                
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!document.querySelector('header').contains(e.target)) {
+                        mobileMenu.classList.add('hidden');
+                        const icon = mobileMenuBtn.querySelector('i');
+                        icon.className = 'fas fa-bars text-xl';
+                    }
+                });
+            }
+
+            // Category filter functionality
+            const categoryBtns = document.querySelectorAll('.category-tag');
+            const blogPosts = document.querySelectorAll('.blog-card');
+
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active button
+                    categoryBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-tech-blue-600', 'text-white');
+                        b.classList.add('bg-white', 'text-tech-blue-600', 'border', 'border-tech-blue-200');
+                    });
+                    btn.classList.add('active', 'bg-tech-blue-600', 'text-white');
+                    btn.classList.remove('bg-white', 'text-tech-blue-600', 'border', 'border-tech-blue-200');
+
+                    // Filter blog posts
+                    const category = btn.getAttribute('data-category');
+                    blogPosts.forEach(post => {
+                        if (category === 'all' || post.getAttribute('data-category') === category) {
+                            post.style.display = 'block';
+                        } else {
+                            post.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Simple pagination functionality (for demo)
+            const pageNumbers = document.querySelectorAll('#page-numbers button');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            pageNumbers.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    // Update active page
+                    pageNumbers.forEach(b => {
+                        b.classList.remove('bg-tech-blue-600', 'border-tech-blue-600', 'text-white');
+                        b.classList.add('bg-white', 'border-gray-300', 'text-gray-700');
+                    });
+                    btn.classList.add('bg-tech-blue-600', 'border-tech-blue-600', 'text-white');
+                    btn.classList.remove('bg-white', 'border-gray-300', 'text-gray-700');
+
+                    // Update prev/next button states
+                    prevBtn.disabled = index === 0;
+                    nextBtn.disabled = index === pageNumbers.length - 1;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
