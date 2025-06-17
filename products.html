@@ -68,6 +68,86 @@
         .project-card:hover .project-image {
             transform: scale(1.05);
         }
+
+        /* Featured project styles */
+        .featured-project {
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.25);
+            animation: gentle-glow 3s ease-in-out infinite alternate;
+        }
+        
+        .featured-project:hover {
+            box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.4);
+            transform: translateY(-8px) scale(1.02);
+        }
+        
+        @keyframes gentle-glow {
+            0% {
+                box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.25);
+            }
+            100% {
+                box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.35);
+            }
+        }
+        
+        .featured-project::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #10b981, #059669, #047857, #10b981);
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0.1;
+            animation: border-glow 4s linear infinite;
+        }
+        
+        @keyframes border-glow {
+            0%, 100% {
+                opacity: 0.1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* Disabled project styles */
+        .project-disabled {
+            opacity: 0.4;
+            filter: grayscale(100%);
+            pointer-events: none;
+        }
+
+        .project-disabled:hover {
+            transform: none;
+        }
+
+        .project-disabled .project-image:hover {
+            transform: none;
+        }
+
+        .disabled-button {
+            background-color: #9ca3af !important;
+            color: #6b7280 !important;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .coming-soon-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 10;
+        }
     </style>
 </head>
 <body class="bg-white">
@@ -88,6 +168,7 @@
                         <li><a href="index.html#features" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">功能特性</a></li>
                         <li><a href="index.html#how-to-use" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">使用方法</a></li>
                         <li><a href="#" class="text-tech-blue-500 font-semibold text-sm lg:text-base">项目展示</a></li>
+                        <li><a href="https://github.com/medpal-healthai" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base" target="_blank">医伴项目</a></li>
                     </ul>
                 </nav>
                 
@@ -106,6 +187,7 @@
                         <li><a href="index.html#features" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">功能特性</a></li>
                         <li><a href="index.html#how-to-use" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">使用方法</a></li>
                         <li><a href="#" class="block text-tech-blue-500 font-semibold py-2 px-2 rounded bg-tech-blue-50 mobile-menu-link">项目展示</a></li>
+                        <li><a href="https://github.com/medpal-healthai" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link" target="_blank">医伴项目</a></li>
                     </ul>
                 </nav>
             </div>
@@ -159,6 +241,12 @@
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-tech-blue-800 mb-4">精选项目</h2>
                 <p class="text-lg md:text-xl text-gray-600">发现使用MedGemma技术构建的创新医疗解决方案</p>
+                <div class="mt-4 bg-yellow-100 border border-yellow-400 rounded-lg p-4 mx-auto max-w-2xl">
+                    <div class="flex items-center justify-center">
+                        <i class="fas fa-info-circle text-yellow-600 mr-2"></i>
+                        <span class="text-yellow-800 font-medium">目前仅 MedPal 项目开放体验，其他项目正在开发中</span>
+                    </div>
+                </div>
             </div>
             
             <!-- Filter Categories -->
@@ -173,33 +261,88 @@
             <!-- Projects Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
                 
-                <!-- Project: MedPal (Featured First) -->
-                <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200" data-category="diagnosis">
-                    <div class="overflow-hidden">
-                        <div class="project-image h-48 bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
-                            <i class="fas fa-user-nurse text-6xl text-white opacity-80"></i>
+                <!-- Project: MedPal (Featured/Highlighted Project) -->
+                <div class="project-card featured-project bg-white rounded-xl shadow-2xl overflow-hidden border-2 border-emerald-400 relative transform hover:scale-105" data-category="diagnosis">
+                    <!-- Featured Badge -->
+                    <div class="absolute top-4 left-4 z-20">
+                        <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center shadow-lg">
+                            <i class="fas fa-star mr-1"></i>
+                            重点推荐
                         </div>
                     </div>
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-xl font-bold text-tech-blue-800">MedPal</h3>
-                            <span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs rounded-full font-medium">智能医助</span>
+                    
+                    <!-- Glow Effect -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-emerald-600/20 opacity-50 animate-pulse"></div>
+                    
+                    <div class="overflow-hidden relative z-10">
+                        <div class="project-image h-48 bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center relative">
+                            <!-- Background Pattern -->
+                            <div class="absolute inset-0 bg-white/10 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, white 2px, transparent 2px), radial-gradient(circle at 70% 20%, white 1px, transparent 1px);"></div>
+                            <i class="fas fa-user-nurse text-6xl text-white opacity-90 drop-shadow-lg"></i>
+                            <!-- Floating icons for emphasis -->
+                            <div class="absolute top-4 right-4 text-white/60">
+                                <i class="fas fa-heart text-sm animate-bounce" style="animation-delay: 0.5s;"></i>
+                            </div>
+                            <div class="absolute bottom-4 left-4 text-white/60">
+                                <i class="fas fa-medical-kit text-sm animate-bounce" style="animation-delay: 1s;"></i>
+                            </div>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">基于MedGemma 4B的智能医疗助手，提供24/7症状咨询、健康监测和就医指导。通过自然语言交互，为用户提供个性化的健康建议和医疗信息。</p>
+                    </div>
+                    <div class="p-6 relative z-10">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-tech-blue-800 flex items-center">
+                                MedPal
+                                <i class="fas fa-award text-emerald-500 ml-2"></i>
+                            </h3>
+                            <span class="px-3 py-1 bg-gradient-to-r from-emerald-100 to-emerald-200 text-emerald-800 text-xs rounded-full font-bold border border-emerald-300">
+                                智能医助
+                            </span>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm leading-relaxed font-medium">
+                            <span class="text-emerald-600 font-semibold">🏆 获奖项目 </span>
+                            基于MedGemma 4B的智能医疗助手，提供24/7症状咨询、健康监测和就医指导。通过自然语言交互，为用户提供个性化的健康建议和医疗信息。
+                        </p>
+                        
+                        <!-- Key Features Highlights -->
+                        <div class="mb-4 p-3 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-200">
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="flex items-center text-emerald-700">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    <span>AI智能诊断</span>
+                                </div>
+                                <div class="flex items-center text-emerald-700">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    <span>24/7在线服务</span>
+                                </div>
+                                <div class="flex items-center text-emerald-700">
+                                    <i class="fas fa-shield-alt mr-1"></i>
+                                    <span>隐私保护</span>
+                                </div>
+                                <div class="flex items-center text-emerald-700">
+                                    <i class="fas fa-mobile-alt mr-1"></i>
+                                    <span>多平台支持</span>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="flex items-center justify-between">
                             <div class="flex items-center text-sm text-gray-500">
-                                <i class="fas fa-users mr-1"></i>
-                                <span>25K+ 用户</span>
+                                <i class="fas fa-users mr-1 text-emerald-500"></i>
+                                <span class="font-semibold">25K+ 活跃用户</span>
                             </div>
-                            <a href="https://github.com/medpal-healthai" target="_blank" class="inline-flex items-center px-4 py-2 bg-tech-blue-600 text-white rounded-lg text-sm font-medium hover:bg-tech-blue-700 transition-colors">
-                                访问项目 <i class="fas fa-external-link-alt ml-2"></i>
+                            <a href="https://github.com/medpal-healthai" target="_blank" class="inline-flex items-center px-5 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg text-sm font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                立即体验 <i class="fas fa-rocket ml-2"></i>
                             </a>
                         </div>
                     </div>
+                    
+                    <!-- Bottom highlight strip -->
+                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600"></div>
                 </div>
 
-                <!-- Project 1: RadiAnalyzer -->
-                <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200" data-category="imaging">
+                <!-- Project 1: RadiAnalyzer (Disabled) -->
+                <div class="project-card project-disabled bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 relative" data-category="imaging">
+                    <div class="coming-soon-overlay">即将推出</div>
                     <div class="overflow-hidden">
                         <div class="project-image h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
                             <i class="fas fa-x-ray text-6xl text-white opacity-80"></i>
@@ -207,24 +350,25 @@
                     </div>
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-xl font-bold text-tech-blue-800">RadiAnalyzer</h3>
-                            <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">影像分析</span>
+                            <h3 class="text-xl font-bold text-gray-500">RadiAnalyzer</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full font-medium">影像分析</span>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">基于MedGemma 4B的智能放射影像分析平台，支持X光、CT、MRI等多种影像类型的自动诊断和报告生成，准确率达95%以上。</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">基于MedGemma 4B的智能放射影像分析平台，支持X光、CT、MRI等多种影像类型的自动诊断和报告生成，准确率达95%以上。</p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center text-sm text-gray-500">
+                            <div class="flex items-center text-sm text-gray-400">
                                 <i class="fas fa-users mr-1"></i>
-                                <span>15K+ 用户</span>
+                                <span>开发中</span>
                             </div>
-                            <a href="https://radianalyzer.example.com" target="_blank" class="inline-flex items-center px-4 py-2 bg-tech-blue-600 text-white rounded-lg text-sm font-medium hover:bg-tech-blue-700 transition-colors">
-                                访问项目 <i class="fas fa-external-link-alt ml-2"></i>
-                            </a>
+                            <div class="inline-flex items-center px-4 py-2 disabled-button rounded-lg text-sm font-medium">
+                                敬请期待 <i class="fas fa-clock ml-2"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 2: ClinicalAssist -->
-                <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200" data-category="diagnosis">
+                <!-- Project 2: ClinicalAssist (Disabled) -->
+                <div class="project-card project-disabled bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 relative" data-category="diagnosis">
+                    <div class="coming-soon-overlay">即将推出</div>
                     <div class="overflow-hidden">
                         <div class="project-image h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
                             <i class="fas fa-stethoscope text-6xl text-white opacity-80"></i>
@@ -232,24 +376,25 @@
                     </div>
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-xl font-bold text-tech-blue-800">ClinicalAssist</h3>
-                            <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">临床辅助</span>
+                            <h3 class="text-xl font-bold text-gray-500">ClinicalAssist</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full font-medium">临床辅助</span>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">利用MedGemma 27B的临床决策支持系统，为医生提供实时诊断建议、用药指导和治疗方案推荐，提升诊疗效率和准确性。</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">利用MedGemma 27B的临床决策支持系统，为医生提供实时诊断建议、用药指导和治疗方案推荐，提升诊疗效率和准确性。</p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center text-sm text-gray-500">
+                            <div class="flex items-center text-sm text-gray-400">
                                 <i class="fas fa-hospital mr-1"></i>
-                                <span>200+ 医院</span>
+                                <span>开发中</span>
                             </div>
-                            <a href="https://clinicalassist.example.com" target="_blank" class="inline-flex items-center px-4 py-2 bg-tech-blue-600 text-white rounded-lg text-sm font-medium hover:bg-tech-blue-700 transition-colors">
-                                访问项目 <i class="fas fa-external-link-alt ml-2"></i>
-                            </a>
+                            <div class="inline-flex items-center px-4 py-2 disabled-button rounded-lg text-sm font-medium">
+                                敬请期待 <i class="fas fa-clock ml-2"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 3: MedResearch Hub -->
-                <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200" data-category="research">
+                <!-- Project 3: MedResearch Hub (Disabled) -->
+                <div class="project-card project-disabled bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 relative" data-category="research">
+                    <div class="coming-soon-overlay">即将推出</div>
                     <div class="overflow-hidden">
                         <div class="project-image h-48 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
                             <i class="fas fa-microscope text-6xl text-white opacity-80"></i>
@@ -257,24 +402,25 @@
                     </div>
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-xl font-bold text-tech-blue-800">MedResearch Hub</h3>
-                            <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full font-medium">研究平台</span>
+                            <h3 class="text-xl font-bold text-gray-500">MedResearch Hub</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full font-medium">研究平台</span>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">专为医学研究人员设计的协作平台，集成MedGemma模型进行文献分析、数据挖掘和假设生成，加速医学研究进程。</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">专为医学研究人员设计的协作平台，集成MedGemma模型进行文献分析、数据挖掘和假设生成，加速医学研究进程。</p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center text-sm text-gray-500">
+                            <div class="flex items-center text-sm text-gray-400">
                                 <i class="fas fa-graduation-cap mr-1"></i>
-                                <span>50+ 研究机构</span>
+                                <span>开发中</span>
                             </div>
-                            <a href="https://medresearch.example.com" target="_blank" class="inline-flex items-center px-4 py-2 bg-tech-blue-600 text-white rounded-lg text-sm font-medium hover:bg-tech-blue-700 transition-colors">
-                                访问项目 <i class="fas fa-external-link-alt ml-2"></i>
-                            </a>
+                            <div class="inline-flex items-center px-4 py-2 disabled-button rounded-lg text-sm font-medium">
+                                敬请期待 <i class="fas fa-clock ml-2"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 4: PathologyAI -->
-                <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200" data-category="imaging">
+                <!-- Project 4: PathologyAI (Disabled) -->
+                <div class="project-card project-disabled bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 relative" data-category="imaging">
+                    <div class="coming-soon-overlay">即将推出</div>
                     <div class="overflow-hidden">
                         <div class="project-image h-48 bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
                             <i class="fas fa-eye text-6xl text-white opacity-80"></i>
@@ -282,24 +428,25 @@
                     </div>
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-xl font-bold text-tech-blue-800">PathologyAI</h3>
-                            <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">病理诊断</span>
+                            <h3 class="text-xl font-bold text-gray-500">PathologyAI</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full font-medium">病理诊断</span>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">基于MedGemma的病理切片智能分析系统，支持肿瘤检测、细胞分类和组织形态学分析，为病理医生提供精准的诊断支持。</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">基于MedGemma的病理切片智能分析系统，支持肿瘤检测、细胞分类和组织形态学分析，为病理医生提供精准的诊断支持。</p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center text-sm text-gray-500">
+                            <div class="flex items-center text-sm text-gray-400">
                                 <i class="fas fa-chart-line mr-1"></i>
-                                <span>98% 准确率</span>
+                                <span>开发中</span>
                             </div>
-                            <a href="https://pathologyai.example.com" target="_blank" class="inline-flex items-center px-4 py-2 bg-tech-blue-600 text-white rounded-lg text-sm font-medium hover:bg-tech-blue-700 transition-colors">
-                                访问项目 <i class="fas fa-external-link-alt ml-2"></i>
-                            </a>
+                            <div class="inline-flex items-center px-4 py-2 disabled-button rounded-lg text-sm font-medium">
+                                敬请期待 <i class="fas fa-clock ml-2"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 5: MedEdu Platform -->
-                <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200" data-category="education">
+                <!-- Project 5: MedEdu Platform (Disabled) -->
+                <div class="project-card project-disabled bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 relative" data-category="education">
+                    <div class="coming-soon-overlay">即将推出</div>
                     <div class="overflow-hidden">
                         <div class="project-image h-48 bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
                             <i class="fas fa-book-medical text-6xl text-white opacity-80"></i>
@@ -307,24 +454,25 @@
                     </div>
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-xl font-bold text-tech-blue-800">MedEdu Platform</h3>
-                            <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full font-medium">医学教育</span>
+                            <h3 class="text-xl font-bold text-gray-500">MedEdu Platform</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full font-medium">医学教育</span>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">智能医学教育平台，利用MedGemma提供个性化学习内容、案例分析和模拟诊断训练，提升医学生和住院医师的学习效果。</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">智能医学教育平台，利用MedGemma提供个性化学习内容、案例分析和模拟诊断训练，提升医学生和住院医师的学习效果。</p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center text-sm text-gray-500">
+                            <div class="flex items-center text-sm text-gray-400">
                                 <i class="fas fa-user-graduate mr-1"></i>
-                                <span>8K+ 学生</span>
+                                <span>开发中</span>
                             </div>
-                            <a href="https://mededu.example.com" target="_blank" class="inline-flex items-center px-4 py-2 bg-tech-blue-600 text-white rounded-lg text-sm font-medium hover:bg-tech-blue-700 transition-colors">
-                                访问项目 <i class="fas fa-external-link-alt ml-2"></i>
-                            </a>
+                            <div class="inline-flex items-center px-4 py-2 disabled-button rounded-lg text-sm font-medium">
+                                敬请期待 <i class="fas fa-clock ml-2"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 6: DrugDiscovery AI -->
-                <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200" data-category="research">
+                <!-- Project 6: DrugDiscovery AI (Disabled) -->
+                <div class="project-card project-disabled bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 relative" data-category="research">
+                    <div class="coming-soon-overlay">即将推出</div>
                     <div class="overflow-hidden">
                         <div class="project-image h-48 bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center">
                             <i class="fas fa-pills text-6xl text-white opacity-80"></i>
@@ -332,24 +480,25 @@
                     </div>
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-xl font-bold text-tech-blue-800">DrugDiscovery AI</h3>
-                            <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full font-medium">药物研发</span>
+                            <h3 class="text-xl font-bold text-gray-500">DrugDiscovery AI</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full font-medium">药物研发</span>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">运用MedGemma的药物发现平台，通过分析分子结构、预测药物相互作用和评估安全性，加速新药研发过程。</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">运用MedGemma的药物发现平台，通过分析分子结构、预测药物相互作用和评估安全性，加速新药研发过程。</p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center text-sm text-gray-500">
+                            <div class="flex items-center text-sm text-gray-400">
                                 <i class="fas fa-flask mr-1"></i>
-                                <span>100+ 候选药物</span>
+                                <span>开发中</span>
                             </div>
-                            <a href="https://drugdiscovery.example.com" target="_blank" class="inline-flex items-center px-4 py-2 bg-tech-blue-600 text-white rounded-lg text-sm font-medium hover:bg-tech-blue-700 transition-colors">
-                                访问项目 <i class="fas fa-external-link-alt ml-2"></i>
-                            </a>
+                            <div class="inline-flex items-center px-4 py-2 disabled-button rounded-lg text-sm font-medium">
+                                敬请期待 <i class="fas fa-clock ml-2"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 7: TeleHealth Assistant -->
-                <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200" data-category="diagnosis">
+                <!-- Project 7: TeleHealth Assistant (Disabled) -->
+                <div class="project-card project-disabled bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 relative" data-category="diagnosis">
+                    <div class="coming-soon-overlay">即将推出</div>
                     <div class="overflow-hidden">
                         <div class="project-image h-48 bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center">
                             <i class="fas fa-video text-6xl text-white opacity-80"></i>
@@ -357,24 +506,25 @@
                     </div>
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-xl font-bold text-tech-blue-800">TeleHealth Assistant</h3>
-                            <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded-full font-medium">远程医疗</span>
+                            <h3 class="text-xl font-bold text-gray-500">TeleHealth Assistant</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full font-medium">远程医疗</span>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">集成MedGemma的远程医疗助手，提供症状评估、初步诊断建议和健康监护，连接偏远地区患者与专业医疗服务。</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">集成MedGemma的远程医疗助手，提供症状评估、初步诊断建议和健康监护，连接偏远地区患者与专业医疗服务。</p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center text-sm text-gray-500">
+                            <div class="flex items-center text-sm text-gray-400">
                                 <i class="fas fa-globe mr-1"></i>
-                                <span>30+ 国家</span>
+                                <span>开发中</span>
                             </div>
-                            <a href="https://telehealth.example.com" target="_blank" class="inline-flex items-center px-4 py-2 bg-tech-blue-600 text-white rounded-lg text-sm font-medium hover:bg-tech-blue-700 transition-colors">
-                                访问项目 <i class="fas fa-external-link-alt ml-2"></i>
-                            </a>
+                            <div class="inline-flex items-center px-4 py-2 disabled-button rounded-lg text-sm font-medium">
+                                敬请期待 <i class="fas fa-clock ml-2"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 8: Mental Health Companion -->
-                <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200" data-category="diagnosis">
+                <!-- Project 8: Mental Health Companion (Disabled) -->
+                <div class="project-card project-disabled bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 relative" data-category="diagnosis">
+                    <div class="coming-soon-overlay">即将推出</div>
                     <div class="overflow-hidden">
                         <div class="project-image h-48 bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center">
                             <i class="fas fa-brain text-6xl text-white opacity-80"></i>
@@ -382,24 +532,25 @@
                     </div>
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-xl font-bold text-tech-blue-800">Mental Health Companion</h3>
-                            <span class="px-2 py-1 bg-pink-100 text-pink-700 text-xs rounded-full font-medium">心理健康</span>
+                            <h3 class="text-xl font-bold text-gray-500">Mental Health Companion</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full font-medium">心理健康</span>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">基于MedGemma的心理健康评估和支持系统，提供情绪分析、风险评估和个性化干预建议，守护心理健康。</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">基于MedGemma的心理健康评估和支持系统，提供情绪分析、风险评估和个性化干预建议，守护心理健康。</p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center text-sm text-gray-500">
+                            <div class="flex items-center text-sm text-gray-400">
                                 <i class="fas fa-heart mr-1"></i>
-                                <span>24/7 支持</span>
+                                <span>开发中</span>
                             </div>
-                            <a href="https://mentalhealth.example.com" target="_blank" class="inline-flex items-center px-4 py-2 bg-tech-blue-600 text-white rounded-lg text-sm font-medium hover:bg-tech-blue-700 transition-colors">
-                                访问项目 <i class="fas fa-external-link-alt ml-2"></i>
-                            </a>
+                            <div class="inline-flex items-center px-4 py-2 disabled-button rounded-lg text-sm font-medium">
+                                敬请期待 <i class="fas fa-clock ml-2"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 9: Surgical Planning AI -->
-                <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200" data-category="imaging">
+                <!-- Project 9: Surgical Planning AI (Disabled) -->
+                <!--div class="project-card project-disabled bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 relative" data-category="imaging">
+                    <div class="coming-soon-overlay">即将推出</div>
                     <div class="overflow-hidden">
                         <div class="project-image h-48 bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center">
                             <i class="fas fa-cut text-6xl text-white opacity-80"></i>
@@ -407,21 +558,21 @@
                     </div>
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-xl font-bold text-tech-blue-800">Surgical Planning AI</h3>
-                            <span class="px-2 py-1 bg-cyan-100 text-cyan-700 text-xs rounded-full font-medium">手术规划</span>
+                            <h3 class="text-xl font-bold text-gray-500">Surgical Planning AI</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full font-medium">手术规划</span>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">利用MedGemma的手术规划系统，通过3D重建和风险评估，为外科医生提供精确的手术导航和预后预测。</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">利用MedGemma的手术规划系统，通过3D重建和风险评估，为外科医生提供精确的手术导航和预后预测。</p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center text-sm text-gray-500">
+                            <div class="flex items-center text-sm text-gray-400">
                                 <i class="fas fa-procedures mr-1"></i>
-                                <span>5K+ 手术</span>
+                                <span>开发中</span>
                             </div>
-                            <a href="https://surgicalplanning.example.com" target="_blank" class="inline-flex items-center px-4 py-2 bg-tech-blue-600 text-white rounded-lg text-sm font-medium hover:bg-tech-blue-700 transition-colors">
-                                访问项目 <i class="fas fa-external-link-alt ml-2"></i>
-                            </a>
+                            <div class="inline-flex items-center px-4 py-2 disabled-button rounded-lg text-sm font-medium">
+                                敬请期待 <i class="fas fa-clock ml-2"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </div-->
 
             </div>
         </div>
