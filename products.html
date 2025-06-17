@@ -53,6 +53,7 @@
             background: linear-gradient(135deg, rgba(0, 85, 204, 0.9) 0%, rgba(0, 85, 204, 0.4) 100%);
         }
 
+        /* Simplified featured project styles */
         .project-card {
             transition: all 0.3s ease;
         }
@@ -67,50 +68,6 @@
 
         .project-card:hover .project-image {
             transform: scale(1.05);
-        }
-
-        /* Featured project styles */
-        .featured-project {
-            position: relative;
-            box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.25);
-            animation: gentle-glow 3s ease-in-out infinite alternate;
-        }
-        
-        .featured-project:hover {
-            box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.4);
-            transform: translateY(-8px) scale(1.02);
-        }
-        
-        @keyframes gentle-glow {
-            0% {
-                box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.25);
-            }
-            100% {
-                box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.35);
-            }
-        }
-        
-        .featured-project::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #10b981, #059669, #047857, #10b981);
-            border-radius: 16px;
-            z-index: -1;
-            opacity: 0.1;
-            animation: border-glow 4s linear infinite;
-        }
-        
-        @keyframes border-glow {
-            0%, 100% {
-                opacity: 0.1;
-            }
-            50% {
-                opacity: 0.3;
-            }
         }
 
         /* Disabled project styles */
@@ -168,7 +125,6 @@
                         <li><a href="index.html#features" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">功能特性</a></li>
                         <li><a href="index.html#how-to-use" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">使用方法</a></li>
                         <li><a href="#" class="text-tech-blue-500 font-semibold text-sm lg:text-base">项目展示</a></li>
-                        <li><a href="https://github.com/medpal-healthai" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base" target="_blank">医伴项目</a></li>
                     </ul>
                 </nav>
                 
@@ -187,7 +143,6 @@
                         <li><a href="index.html#features" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">功能特性</a></li>
                         <li><a href="index.html#how-to-use" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">使用方法</a></li>
                         <li><a href="#" class="block text-tech-blue-500 font-semibold py-2 px-2 rounded bg-tech-blue-50 mobile-menu-link">项目展示</a></li>
-                        <li><a href="https://github.com/medpal-healthai" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link" target="_blank">医伴项目</a></li>
                     </ul>
                 </nav>
             </div>
@@ -262,82 +217,41 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
                 
                 <!-- Project: MedPal (Featured/Highlighted Project) -->
-                <div class="project-card featured-project bg-white rounded-xl shadow-2xl overflow-hidden border-2 border-emerald-400 relative transform hover:scale-105" data-category="diagnosis">
+                <div class="project-card bg-white rounded-xl shadow-xl overflow-hidden border-2 border-emerald-400 relative" data-category="diagnosis">
                     <!-- Featured Badge -->
                     <div class="absolute top-4 left-4 z-20">
-                        <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center shadow-lg">
+                        <div class="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center">
                             <i class="fas fa-star mr-1"></i>
                             重点推荐
                         </div>
                     </div>
                     
-                    <!-- Glow Effect -->
-                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-emerald-600/20 opacity-50 animate-pulse"></div>
-                    
-                    <div class="overflow-hidden relative z-10">
-                        <div class="project-image h-48 bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center relative">
-                            <!-- Background Pattern -->
-                            <div class="absolute inset-0 bg-white/10 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, white 2px, transparent 2px), radial-gradient(circle at 70% 20%, white 1px, transparent 1px);"></div>
-                            <i class="fas fa-user-nurse text-6xl text-white opacity-90 drop-shadow-lg"></i>
-                            <!-- Floating icons for emphasis -->
-                            <div class="absolute top-4 right-4 text-white/60">
-                                <i class="fas fa-heart text-sm animate-bounce" style="animation-delay: 0.5s;"></i>
-                            </div>
-                            <div class="absolute bottom-4 left-4 text-white/60">
-                                <i class="fas fa-medical-kit text-sm animate-bounce" style="animation-delay: 1s;"></i>
-                            </div>
+                    <div class="overflow-hidden">
+                        <div class="project-image h-48 bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
+                            <i class="fas fa-user-nurse text-6xl text-white"></i>
                         </div>
                     </div>
-                    <div class="p-6 relative z-10">
+                    <div class="p-6">
                         <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-xl font-bold text-tech-blue-800 flex items-center">
-                                MedPal
-                                <i class="fas fa-award text-emerald-500 ml-2"></i>
-                            </h3>
-                            <span class="px-3 py-1 bg-gradient-to-r from-emerald-100 to-emerald-200 text-emerald-800 text-xs rounded-full font-bold border border-emerald-300">
+                            <h3 class="text-xl font-bold text-tech-blue-800">MedPal</h3>
+                            <span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs rounded-full font-medium">
                                 智能医助
                             </span>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm leading-relaxed font-medium">
-                            <span class="text-emerald-600 font-semibold">🏆 获奖项目 </span>
+                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">
                             基于MedGemma 4B的智能医疗助手，提供24/7症状咨询、健康监测和就医指导。通过自然语言交互，为用户提供个性化的健康建议和医疗信息。
                         </p>
-                        
-                        <!-- Key Features Highlights -->
-                        <div class="mb-4 p-3 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg border border-emerald-200">
-                            <div class="grid grid-cols-2 gap-2 text-xs">
-                                <div class="flex items-center text-emerald-700">
-                                    <i class="fas fa-check-circle mr-1"></i>
-                                    <span>AI智能诊断</span>
-                                </div>
-                                <div class="flex items-center text-emerald-700">
-                                    <i class="fas fa-clock mr-1"></i>
-                                    <span>24/7在线服务</span>
-                                </div>
-                                <div class="flex items-center text-emerald-700">
-                                    <i class="fas fa-shield-alt mr-1"></i>
-                                    <span>隐私保护</span>
-                                </div>
-                                <div class="flex items-center text-emerald-700">
-                                    <i class="fas fa-mobile-alt mr-1"></i>
-                                    <span>多平台支持</span>
-                                </div>
-                            </div>
-                        </div>
                         
                         <div class="flex items-center justify-between">
                             <div class="flex items-center text-sm text-gray-500">
                                 <i class="fas fa-users mr-1 text-emerald-500"></i>
                                 <span class="font-semibold">25K+ 活跃用户</span>
                             </div>
-                            <a href="https://github.com/medpal-healthai" target="_blank" class="inline-flex items-center px-5 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg text-sm font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            <a href="https://github.com/medpal-healthai" target="_blank" class="inline-flex items-center px-4 py-2 bg-emerald-500 text-white rounded-lg text-sm font-medium hover:bg-emerald-600 transition-colors">
                                 立即体验 <i class="fas fa-rocket ml-2"></i>
                             </a>
                         </div>
                     </div>
-                    
-                    <!-- Bottom highlight strip -->
-                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600"></div>
                 </div>
 
                 <!-- Project 1: RadiAnalyzer (Disabled) -->
