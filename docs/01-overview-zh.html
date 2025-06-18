@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MedGemma完全指南：Google最新医学AI模型深度解析。了解4B多模态版本和27B纯文本版本的核心特性、应用场景和适配方法。">
+    <meta name="keywords" content="MedGemma, Google医学AI, Gemma 3, 医学图像分类, 临床推理, AI模型适配">
+    <title>MedGemma完全指南：Google最新医学AI模型深度解析 - MedGemma技术文档</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <script defer data-domain="medgemma.org" src="https://app.pageview.app/js/script.js"></script>
+
+    <!-- TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tech-blue': {
+                            100: '#E6F0FF',
+                            200: '#CCE0FF',
+                            300: '#99C0FF',
+                            400: '#66A0FF',
+                            500: '#3380FF',
+                            600: '#0055CC',
+                            700: '#004099',
+                            800: '#002B66',
+                            900: '#001533',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .gradient-tech {
+            background: linear-gradient(135deg, rgba(51, 128, 255, 0.9) 0%, rgba(51, 128, 255, 0.4) 100%);
+        }
+
+        .article-content {
+            line-height: 1.8;
+        }
+
+        .article-content h1,
+        .article-content h2,
+        .article-content h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: #002B66;
+        }
+
+        .article-content h1 {
+            font-size: 2.25rem;
+            border-bottom: 3px solid #3380FF;
+            padding-bottom: 0.5rem;
+        }
+
+        .article-content h2 {
+            font-size: 1.875rem;
+            border-left: 4px solid #3380FF;
+            padding-left: 1rem;
+        }
+
+        .article-content h3 {
+            font-size: 1.5rem;
+            color: #004099;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            color: #374151;
+        }
+
+        .article-content ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+            color: #374151;
+            position: relative;
+        }
+
+        .article-content li::marker {
+            color: #3380FF;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(51, 128, 255, 0.05) 0%, rgba(51, 128, 255, 0.02) 100%);
+            border-left: 4px solid #3380FF;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .share-btn {
+            transition: all 0.3s ease;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .toc-link {
+            transition: all 0.3s ease;
+        }
+
+        .toc-link:hover {
+            background-color: rgba(51, 128, 255, 0.1);
+            padding-left: 1rem;
+        }
+
+        .toc-link.active {
+            background-color: rgba(51, 128, 255, 0.15);
+            border-left: 3px solid #3380FF;
+            padding-left: 1rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Sticky Header with Glass Effect -->
+    <header class="glass-effect fixed w-full top-0 z-50 shadow-md">
+        <div class="max-w-screen-lg mx-auto px-4 py-2 md:py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="../logo.png" alt="MedGemma Logo" class="h-6 md:h-8 w-auto mr-2 md:mr-3">
+                    <h1 class="text-tech-blue-800 text-lg md:text-xl font-bold">MedGemma</h1>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-6">
+                        <li><a href="../index.html" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">首页</a></li>
+                        <li><a href="../index.html#what-is-medgemma" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">什么是MedGemma</a></li>
+                        <li><a href="../index.html#features" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">功能特性</a></li>
+                        <li><a href="../index.html#how-to-use" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">使用方法</a></li>
+                        <li><a href="../products.html" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">项目展示</a></li>
+                        <li><a href="../blog.html" class="text-tech-blue-500 font-semibold text-sm lg:text-base">技术博客</a></li>
+                        <li><a href="../discussion.html" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base">社区讨论</a></li>
+                        <li><a href="https://github.com/medpal-healthai" class="text-tech-blue-700 hover:text-tech-blue-500 text-sm lg:text-base" target="_blank">医伴项目</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-tech-blue-700 focus:outline-none focus:text-tech-blue-500" id="mobile-menu-btn">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <div class="md:hidden hidden mt-4 pb-2" id="mobile-menu">
+                <nav>
+                    <ul class="space-y-2">
+                        <li><a href="../index.html" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">首页</a></li>
+                        <li><a href="../index.html#what-is-medgemma" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">什么是MedGemma</a></li>
+                        <li><a href="../index.html#features" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">功能特性</a></li>
+                        <li><a href="../index.html#how-to-use" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">使用方法</a></li>
+                        <li><a href="../products.html" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">项目展示</a></li>
+                        <li><a href="../blog.html" class="block text-tech-blue-500 font-semibold py-2 px-2 rounded bg-tech-blue-50 mobile-menu-link">技术博客</a></li>
+                        <li><a href="../discussion.html" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link">社区讨论</a></li>
+                        <li><a href="https://github.com/medpal-healthai" class="block text-tech-blue-700 hover:text-tech-blue-500 py-2 px-2 rounded hover:bg-tech-blue-50 mobile-menu-link" target="_blank">医伴项目</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="pt-24 md:pt-28 pb-4 bg-gray-50">
+        <div class="max-w-screen-lg mx-auto px-4">
+            <nav class="flex items-center space-x-2 text-sm text-gray-600">
+                <a href="../index.html" class="hover:text-tech-blue-600">首页</a>
+                <i class="fas fa-chevron-right text-xs"></i>
+                <a href="../blog.html" class="hover:text-tech-blue-600">技术博客</a>
+                <i class="fas fa-chevron-right text-xs"></i>
+                <span class="text-gray-400">MedGemma完全指南</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Article Header -->
+    <section class="py-8 md:py-12 bg-gray-50">
+        <div class="max-w-screen-lg mx-auto px-4">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <!-- Article Meta -->
+                <div class="flex flex-wrap items-center gap-4 mb-6">
+                    <span class="px-3 py-1 bg-tech-blue-100 text-tech-blue-700 text-sm rounded-full font-medium">技术原理</span>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-calendar mr-2 text-tech-blue-500"></i>
+                        <time>2024年12月15日</time>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-clock mr-2 text-tech-blue-500"></i>
+                        <span>12分钟阅读</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-user mr-2 text-tech-blue-500"></i>
+                        <span>Google Health AI团队</span>
+                    </div>
+                </div>
+
+                <!-- Article Title -->
+                <h1 class="text-3xl md:text-4xl font-bold text-tech-blue-800 mb-4">MedGemma完全指南：Google最新医学AI模型深度解析</h1>
+                
+                <!-- Article Summary -->
+                <div class="highlight-box">
+                    <h3 class="text-lg font-bold text-tech-blue-800 mb-3">
+                        <i class="fas fa-lightbulb mr-2"></i>
+                        文档摘要
+                    </h3>
+                    <p class="text-gray-700 mb-0">
+                        MedGemma系列是Google基于Gemma 3构建的最强大医学开源模型，包含4B多模态版本和27B纯文本版本。本指南详细介绍MedGemma在医学图像分类、图像解读、临床推理等核心应用场景，以及提示工程、微调和智能体编排等关键适配方法，为医疗AI开发者提供完整的技术参考。
+                    </p>
+                </div>
+
+                <!-- Social Share -->
+                <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-600">分享文档：</span>
+                        <button class="share-btn flex items-center px-3 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600">
+                            <i class="fab fa-twitter mr-2"></i>
+                            Twitter
+                        </button>
+                        <button class="share-btn flex items-center px-3 py-2 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600">
+                            <i class="fab fa-weixin mr-2"></i>
+                            微信
+                        </button>
+                        <button class="share-btn flex items-center px-3 py-2 bg-gray-600 text-white rounded-lg text-sm hover:bg-gray-700">
+                            <i class="fas fa-link mr-2"></i>
+                            复制链接
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <i class="fas fa-eye mr-1 text-tech-blue-500"></i>
+                            <span>3,580 阅读</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-comment mr-1 text-tech-blue-500"></i>
+                            <span>42 评论</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-8 md:py-12 bg-white">
+        <div class="max-w-screen-lg mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                
+                <!-- Table of Contents (Sidebar) -->
+                <div class="lg:col-span-1 order-2 lg:order-1">
+                    <div class="sticky top-32">
+                        <div class="bg-gray-50 rounded-xl p-6">
+                            <h3 class="text-lg font-bold text-tech-blue-800 mb-4">
+                                <i class="fas fa-list mr-2"></i>
+                                目录
+                            </h3>
+                            <nav class="space-y-2">
+                                <a href="#medgemma" class="toc-link block py-2 px-3 text-sm text-gray-700 hover:text-tech-blue-600 rounded">MedGemma简介</a>
+                                <a href="#common-use-cases" class="toc-link block py-2 px-3 text-sm text-gray-700 hover:text-tech-blue-600 rounded">常见用例</a>
+                                <a href="#medical-image-classification" class="toc-link block py-2 px-3 text-sm text-gray-600 hover:text-tech-blue-600 rounded ml-4">医学图像分类</a>
+                                <a href="#medical-image-interpretation" class="toc-link block py-2 px-3 text-sm text-gray-600 hover:text-tech-blue-600 rounded ml-4">医学图像解读</a>
+                                <a href="#medical-text-comprehension" class="toc-link block py-2 px-3 text-sm text-gray-600 hover:text-tech-blue-600 rounded ml-4">文本理解与推理</a>
+                                <a href="#adapting-medgemma" class="toc-link block py-2 px-3 text-sm text-gray-700 hover:text-tech-blue-600 rounded">适配MedGemma</a>
+                                <a href="#prompt-engineering" class="toc-link block py-2 px-3 text-sm text-gray-600 hover:text-tech-blue-600 rounded ml-4">提示工程</a>
+                                <a href="#fine-tuning" class="toc-link block py-2 px-3 text-sm text-gray-600 hover:text-tech-blue-600 rounded ml-4">微调</a>
+                                <a href="#agentic-orchestration" class="toc-link block py-2 px-3 text-sm text-gray-600 hover:text-tech-blue-600 rounded ml-4">智能体编排</a>
+                                <a href="#next-steps" class="toc-link block py-2 px-3 text-sm text-gray-700 hover:text-tech-blue-600 rounded">下一步</a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article Content -->
+                <div class="lg:col-span-3 order-1 lg:order-2">
+                    <article class="article-content bg-white rounded-xl shadow-lg p-6 md:p-8">
+                        
+                        <section id="medgemma">
+                            <h1>MedGemma</h1>
+                            <p>
+                                MedGemma系列包含Google在医学文本和图像理解方面最强大的开源模型，基于Gemma 3构建。开发人员可以使用MedGemma加速构建基于医疗保健的AI应用程序。MedGemma有两个版本：4B多模态版本和27B纯文本版本。
+                            </p>
+                            <p>
+                                有关如何使用模型以及训练方式的详细信息，请参阅MedGemma模型卡片。
+                            </p>
+                        </section>
+
+                        <section id="common-use-cases">
+                            <h1>常见用例</h1>
+                            <p>
+                                以下部分介绍了该模型的一些常见用例。您可以自由探索任何用例，只要遵守Health AI Developer Foundations使用条款。
+                            </p>
+                        </section>
+
+                        <section id="medical-image-classification">
+                            <h2>医学图像分类</h2>
+                            <p>
+                                MedGemma 4B的预训练使其成为适用于医学图像分类的良好起点，包括放射学、数字病理学、眼底和皮肤图像。MedGemma与同等规模的类似模型相比，基线性能表现强劲，但开发人员应在生产环境中部署之前验证其性能并进行必要的改进。
+                            </p>
+                        </section>
+
+                        <section id="medical-image-interpretation">
+                            <h2>医学图像解读</h2>
+                            <p>
+                                MedGemma 4B的预训练使其成为生成医学图像报告或回答关于医学图像的自然语言问题的良好起点。MedGemma与同等规模的类似模型相比基线性能强劲，但尚未达到临床级别，因此可能需要额外的微调。
+                            </p>
+                        </section>
+
+                        <section id="medical-text-comprehension">
+                            <h2>医学文本理解和临床推理</h2>
+                            <p>
+                                MedGemma可以适用于需要医学知识的用例。此类用例可能包括患者访谈、分诊、临床决策支持和摘要。对于大多数用例，较大的MedGemma 27B模型通常会产生最佳性能。两种规模的MedGemma与同等规模的类似模型相比都具有强劲的基线性能，但开发人员应在生产环境中部署之前验证其适配模型的性能并进行必要的改进。
+                            </p>
+                        </section>
+
+                        <section id="adapting-medgemma">
+                            <h1>适配MedGemma</h1>
+                            <p>
+                                MedGemma是一个开发者模型，需要在开发者的预期用例上进行验证。基于这些验证结果，用户可能需要进一步适配模型以提高性能。以下是开发人员可以用来提高MedGemma在其用例中性能的一些适配类型。
+                            </p>
+                        </section>
+
+                        <section id="prompt-engineering">
+                            <h2>提示工程/上下文学习</h2>
+                            <p>
+                                对于某些用例，通过仔细的提示，MedGemma的基线性能可能就足够了，这可能包括在提示中包含理想示例响应的少样本示例，换句话说就是上下文学习。提示工程也可以使用MedGemma将任务分解为可以单独执行的子任务。使用提示工程的适配需要与任何其他类型的适配相同级别的验证。
+                            </p>
+                        </section>
+
+                        <section id="fine-tuning">
+                            <h2>微调</h2>
+                            <p>
+                                可以对MedGemma进行微调，以提高其在已训练任务上的性能，或为其添加额外的任务。有关如何使用LoRA（一种参数高效的微调技术）微调MedGemma的示例，请参阅此笔记本。
+                            </p>
+                            <p>
+                                用户可以专门微调语言模型解码器组件，以帮助模型更好地解释图像编码器产生的视觉令牌，或者同时微调两者。
+                            </p>
+                        </section>
+
+                        <section id="agentic-orchestration">
+                            <h2>智能体编排</h2>
+                            <p>
+                                MedGemma可以作为智能体系统中的工具使用，与其他工具结合，如网络搜索、FHIR生成器/解释器、用于双向音频对话的Gemini Live，或用于函数调用或推理的Gemini 2.5 Pro。MedGemma也可以用于在本地解析私人健康数据，然后将匿名化请求发送到像Gemini 2.5 Pro这样的集中式模型。
+                            </p>
+                        </section>
+
+                        <section id="next-steps">
+                            <h1>下一步</h1>
+                            <p>
+                                开始使用模型
+                            </p>
+                            
+                            <div class="highlight-box">
+                                <h3 class="text-lg font-bold text-green-600 mb-3">
+                                    <i class="fas fa-rocket mr-2"></i>
+                                    开始使用MedGemma
+                                </h3>
+                                <p class="mb-3">
+                                    想要开始使用MedGemma？以下资源将帮助您快速上手：
+                                </p>
+                                <ul class="list-disc pl-6 space-y-1">
+                                    <li><a href="https://developers.google.com/health-ai-developer-foundations/medgemma" class="text-tech-blue-600 hover:underline" target="_blank">官方开发者文档</a></li>
+                                    <li><a href="https://github.com/Google-Health/medgemma" class="text-tech-blue-600 hover:underline" target="_blank">GitHub代码仓库</a></li>
+                                    <li><a href="https://huggingface.co/collections/google/medgemma-release-680aade845f90bec6a3f60c4" class="text-tech-blue-600 hover:underline" target="_blank">Hugging Face模型集合</a></li>
+                                    <li><a href="../index.html#how-to-use" class="text-tech-blue-600 hover:underline">快速入门指南</a></li>
+                                </ul>
+                            </div>
+                        </section>
+
+                    </article>
+
+                    <!-- Article Footer -->
+                    <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+                        <!-- Tags -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold text-tech-blue-800 mb-3">相关标签</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-tech-blue-100 text-tech-blue-700 text-sm rounded-full">MedGemma</span>
+                                <span class="px-3 py-1 bg-tech-blue-100 text-tech-blue-700 text-sm rounded-full">Google AI</span>
+                                <span class="px-3 py-1 bg-tech-blue-100 text-tech-blue-700 text-sm rounded-full">Gemma 3</span>
+                                <span class="px-3 py-1 bg-tech-blue-100 text-tech-blue-700 text-sm rounded-full">医学图像</span>
+                                <span class="px-3 py-1 bg-tech-blue-100 text-tech-blue-700 text-sm rounded-full">临床推理</span>
+                                <span class="px-3 py-1 bg-tech-blue-100 text-tech-blue-700 text-sm rounded-full">AI模型适配</span>
+                                <span class="px-3 py-1 bg-tech-blue-100 text-tech-blue-700 text-sm rounded-full">开源模型</span>
+                            </div>
+                        </div>
+
+                        <!-- Author Bio -->
+                        <div class="border-t border-gray-200 pt-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-16 h-16 bg-tech-blue-100 rounded-full flex items-center justify-center">
+                                    <i class="fab fa-google text-tech-blue-600 text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-tech-blue-800">Google Health AI团队</h3>
+                                    <p class="text-sm text-gray-600 mb-2">Google DeepMind & Google Research</p>
+                                    <p class="text-sm text-gray-700">
+                                        Google Health AI团队致力于开发安全、有效的医疗AI技术，推动医学AI在全球范围内的应用和普及。MedGemma是团队在医学领域大型语言模型方面的最新成果。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-tech-blue-900 text-white py-8 md:py-10">
+        <div class="max-w-screen-lg mx-auto px-4">
+            <!-- Medical Disclaimer -->
+            <div class="bg-tech-blue-800 rounded-lg p-4 md:p-6 mb-6 md:mb-8 border-l-4 border-yellow-400">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mr-3 md:mr-4">
+                        <i class="fas fa-exclamation-triangle text-yellow-400 text-xl md:text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg md:text-xl font-bold text-yellow-400 mb-2 md:mb-3">医学免责声明</h3>
+                        <div class="text-tech-blue-100 space-y-1 md:space-y-2 text-xs md:text-sm">
+                            <p><strong>非医学建议：</strong>本文档仅用于教育和信息目的。文档内容不构成医学建议、诊断或治疗方案。</p>
+                            <p><strong>仅供开发参考：</strong>技术内容专为AI模型开发和研究而设计。请勿将模型直接用于临床决策。</p>
+                            <p><strong>咨询医疗专业人员：</strong>任何医疗相关决策请始终咨询合格的医疗专业人员。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                <div class="sm:col-span-2">
+                    <div class="flex items-center mb-3 md:mb-4">
+                        <img src="../logo.png" alt="MedGemma Logo" class="h-6 md:h-8 w-auto mr-2 md:mr-3">
+                        <h3 class="text-lg md:text-xl font-bold">关于MedGemma</h3>
+                    </div>
+                    <p class="text-tech-blue-200 mb-3 md:mb-4 text-sm md:text-base">MedGemma代表了医学AI的重大进步，为医疗保健中的图像和文本处理提供强大的功能。</p>
+                    <p class="text-tech-blue-200 text-xs md:text-sm">© 2025 本网站运营由MedGemma.org.cn 团队支持（非Google公司），而MedGemma品牌及商标属于谷歌DeepMind 所有关于MedGemma的信息均基于公开可用数据。</p>
+                </div>
+                <div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4">资源</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://deepmind.google/models/gemma/medgemma/" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">MedGemma官方网站</a></li>
+                        <li><a href="https://developers.google.com/health-ai-developer-foundations/medgemma" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">开发者文档</a></li>
+                        <li><a href="https://github.com/Google-Health/medgemma" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">GitHub仓库</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4">连接</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://huggingface.co/collections/google/medgemma-release-680aade845f90bec6a3f60c4" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">Hugging Face集合</a></li>
+                        <li><a href="https://huggingface.co/spaces/google/rad_explain" target="_blank" rel="nofollow" class="text-tech-blue-200 hover:text-white text-sm md:text-base">放射学解释器演示</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Wait for DOM to be loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    if (mobileMenu.classList.contains('hidden')) {
+                        icon.className = 'fas fa-bars text-xl';
+                    } else {
+                        icon.className = 'fas fa-times text-xl';
+                    }
+                });
+                
+                // Close mobile menu when clicking on a link
+                mobileMenuLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        const icon = mobileMenuBtn.querySelector('i');
+                        icon.className = 'fas fa-bars text-xl';
+                    });
+                });
+                
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!document.querySelector('header').contains(e.target)) {
+                        mobileMenu.classList.add('hidden');
+                        const icon = mobileMenuBtn.querySelector('i');
+                        icon.className = 'fas fa-bars text-xl';
+                    }
+                });
+            }
+
+            // Table of contents navigation
+            const tocLinks = document.querySelectorAll('.toc-link');
+            const sections = document.querySelectorAll('section[id]');
+            
+            // Highlight current section in TOC
+            function highlightTOC() {
+                const scrollPosition = window.scrollY + 200;
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        tocLinks.forEach(link => link.classList.remove('active'));
+                        const activeLink = document.querySelector(`a[href="#${sectionId}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                        }
+                    }
+                });
+            }
+            
+            // Smooth scroll for TOC links
+            tocLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+            
+            // Update TOC on scroll
+            window.addEventListener('scroll', highlightTOC);
+
+            // Share functionality
+            const shareButtons = document.querySelectorAll('.share-btn');
+            shareButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const platform = btn.textContent.trim();
+                    const url = window.location.href;
+                    const title = document.title;
+                    
+                    if (platform.includes('Twitter')) {
+                        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, '_blank');
+                    } else if (platform.includes('复制链接')) {
+                        navigator.clipboard.writeText(url).then(() => {
+                            btn.innerHTML = '<i class="fas fa-check mr-2"></i>已复制';
+                            setTimeout(() => {
+                                btn.innerHTML = '<i class="fas fa-link mr-2"></i>复制链接';
+                            }, 2000);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
